@@ -1,0 +1,17 @@
+{
+  "description": "Exact version IOCs for known malicious npm releases (supplement when OSV/offline). Not a package watch list.",
+  "packages": [
+    {
+      "name": "axios",
+      "versions": ["1.14.1", "0.30.4"],
+      "id": "ioc-axios-2026-03",
+      "summary": "Supply-chain compromised releases (March 2026); see Elastic Security Labs / Microsoft guidance"
+    },
+    {
+      "name": "plain-crypto-js",
+      "versions": ["4.2.1"],
+      "id": "ioc-plain-crypto-js-2026-03",
+      "summary": "Malicious postinstall dropper associated with compromised axios releases"
+    }
+  ]
+}

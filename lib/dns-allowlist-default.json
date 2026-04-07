@@ -1,0 +1,27 @@
+{
+  "suffixes": [
+    "npmjs.org",
+    "registry.npmjs.org",
+    "nodejs.org",
+    "github.com",
+    "codeload.github.com",
+    "objects.githubusercontent.com",
+    "raw.githubusercontent.com",
+    "api.github.com",
+    "unpkg.com",
+    "jsdelivr.net",
+    "fastly.com",
+    "cloudflare.com",
+    "googleapis.com",
+    "gstatic.com",
+    "microsoft.com",
+    "azureedge.net",
+    "amazonaws.com",
+    "docker.io",
+    "docker.com"
+  ],
+  "exactHosts": [
+    "localhost",
+    "127.0.0.1"
+  ]
+}

@@ -1,0 +1,15 @@
+FROM node:20-bookworm-slim
+
+RUN apt-get update \
+  && apt-get install -y --no-install-recommends \
+    tcpdump \
+    ca-certificates \
+    git \
+    openssh-client \
+  && rm -rf /var/lib/apt/lists/*
+
+COPY entrypoint-sandbox.sh /entrypoint-sandbox.sh
+RUN chmod +x /entrypoint-sandbox.sh
+
+WORKDIR /work
+ENTRYPOINT ["/entrypoint-sandbox.sh"]

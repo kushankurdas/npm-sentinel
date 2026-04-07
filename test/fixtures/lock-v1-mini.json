@@ -1,0 +1,16 @@
+{
+  "lockfileVersion": 1,
+  "dependencies": {
+    "axios": {
+      "version": "1.14.0",
+      "requires": {
+        "follow-redirects": "^1.15.6"
+      },
+      "dependencies": {
+        "follow-redirects": {
+          "version": "1.15.6"
+        }
+      }
+    }
+  }
+}

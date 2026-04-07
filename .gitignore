@@ -1,0 +1,8 @@
+node_modules/
+.DS_Store
+*.log
+
+# Local editor / debug
+.cursor/
+.env
+.env.*
