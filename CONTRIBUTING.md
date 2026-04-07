@@ -16,4 +16,4 @@ Thanks for helping improve npm-sentinel.
 
 ## Security
 
-If you find a security issue in this **tool** (not general npm supply-chain discussion), please open a private security advisory on GitHub if available, or contact the maintainers.
+See **[SECURITY.md](SECURITY.md)** for how to report vulnerabilities in this project.

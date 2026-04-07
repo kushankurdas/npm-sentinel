@@ -3,16 +3,19 @@
   "version": "0.1.0",
   "description": "Static gate (lockfile + OSV) and isolated Docker npm install with DNS allowlisting",
   "license": "MIT",
-  "author": "",
+  "author": {
+    "name": "kushankurdas",
+    "url": "https://github.com/kushankurdas"
+  },
   "type": "module",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kushankurxd/npm-sentinel.git"
+    "url": "git+https://github.com/kushankurdas/npm-sentinel.git"
   },
   "bugs": {
-    "url": "https://github.com/kushankurxd/npm-sentinel/issues"
+    "url": "https://github.com/kushankurdas/npm-sentinel/issues"
   },
-  "homepage": "https://github.com/kushankurxd/npm-sentinel#readme",
+  "homepage": "https://github.com/kushankurdas/npm-sentinel#readme",
   "engines": {
     "node": ">=18"
   },
@@ -23,6 +26,9 @@
     "bin",
     "lib",
     "docker",
+    "docs",
+    "CONTRIBUTING.md",
+    "SECURITY.md",
     "LICENSE",
     "README.md"
   ],

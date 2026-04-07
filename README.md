@@ -216,8 +216,10 @@ When you compare to a saved baseline, npm-sentinel can report:
 
 ## Development (this repo)
 
+Extra guides (testing **`check`**, sandbox/DNS, supply-chain context): **[`docs/`](docs/README.md)**. Security reports: **[`SECURITY.md`](SECURITY.md)**.
+
 ```bash
-git clone https://github.com/kushankurxd/npm-sentinel.git
+git clone https://github.com/kushankurdas/npm-sentinel.git
 cd npm-sentinel
 npm ci
 npm test
