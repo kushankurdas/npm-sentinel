@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Security vulnerability
+    url: https://github.com/kushankurdas/npm-sentinel/security/advisories/new
+    about: Report privately via GitHub Security Advisories (see SECURITY.md).
+  - name: Contributing
+    url: https://github.com/kushankurdas/npm-sentinel/blob/main/CONTRIBUTING.md
+    about: Guidelines for development and pull requests.
