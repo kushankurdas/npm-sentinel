@@ -1,11 +1,27 @@
 # npm-sentinel documentation
 
-Reference material for using and testing **npm-sentinel** (static lockfile checks, baseline drift, and Docker sandbox with DNS allowlisting).
+Command references below match the CLI in `bin/cli.js`. The **[main README](../README.md)** is the quick-start and cheat sheet.
 
-| Document | Contents |
-|----------|----------|
-| [Testing the static "check" command](testing-static-check.md) | OSV, offline IOCs, vulnerable packages, exit codes |
-| [Sandbox mode and DNS](sandbox-and-dns.md) | What `npm ci` does, how sandbox works, failures, allowlist, testing DNS violations, troubleshooting |
-| [Supply-chain context](supply-chain-context.md) | Axios-style incidents, lifecycle scripts, limits of DNS gating |
+## Command reference
 
-Start with the static check doc for daily/CI usage; use the sandbox doc when you need install-time behavior in isolation.
+| Command | Guide |
+|--------|--------|
+| **`check`** | [commands/check.md](commands/check.md) — lockfile scan (OSV, offline IOCs), optional baseline diff and npm audit |
+| **`baseline`** | [commands/baseline.md](commands/baseline.md) — `save` and `diff` for trusted-tree snapshots |
+| **`sandbox`** | [commands/sandbox.md](commands/sandbox.md) — Docker `npm ci` with DNS capture and allowlist |
+| **`gate`** | [commands/gate.md](commands/gate.md) — CI-friendly check + optional sandbox |
+| **`help`** | [commands/help.md](commands/help.md) — built-in help text |
+
+## Shared configuration
+
+- **Project root:** `--cwd <dir>` (default: current directory).
+- **Config files:** `npm-sentinel.config.json` or `.npm-sentinelsrc.json` — see [reference/config.md](reference/config.md).
+- **Global flags:** [reference/flags.md](reference/flags.md) summarizes all CLI flags by command.
+
+## Testing
+
+See **[testing.md](testing.md)** for links to each command’s testing section and how to run **`npm test`** in this repo.
+
+## Related topics
+
+- Supply-chain background (e.g. lifecycle-based attacks): see the main README’s “Related reading” and [SECURITY.md](../SECURITY.md).
