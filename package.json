@@ -1,5 +1,5 @@
 {
-  "name": "npm-sentinel",
+  "name": "@kushankurdas/npm-sentinel",
   "version": "0.1.0",
   "description": "Static gate (lockfile + OSV) and isolated Docker npm install with DNS allowlisting",
   "license": "MIT",
