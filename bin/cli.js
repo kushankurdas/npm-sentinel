@@ -284,7 +284,7 @@ Flags:
   --ssh-dir <path>   sandbox: mount this directory instead of ~/.ssh (implies SSH mount)
   --baseline-file    Alternate baseline path
 
-Config (npm-sentinel.config.json): sandbox.mountSsh, sandbox.sshDir
+Config (npm-sentinel.config.json): sandbox.mountSsh, sandbox.sshDir, dnsAllowlist.mode (merge|replace)
 
 preinstall (host, static only):
   "preinstall": "npx --yes npm-sentinel@latest check --baseline"

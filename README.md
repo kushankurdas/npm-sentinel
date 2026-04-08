@@ -184,6 +184,7 @@ Create **`npm-sentinel.config.json`** or **`.npm-sentinelsrc.json`** in the proj
   "watchPackagesExtra": ["some-transitive-parent"],
   "watchPackagesOverride": null,
   "dnsAllowlist": {
+    "mode": "merge",
     "suffixes": ["my-registry.example.com"],
     "exactHosts": []
   },
@@ -197,7 +198,7 @@ Create **`npm-sentinel.config.json`** or **`.npm-sentinelsrc.json`** in the proj
 |-----|---------|
 | **Watched packages** | Defaults to root `dependencies` + `devDependencies` (+ optional peers / optionals). `watchPackagesExtra` adds more parent names. |
 | **`watchPackagesOverride`** | If set (array), **only** these names are watched (replaces default list + extras). |
-| **`dnsAllowlist`** | Extra allowed DNS suffixes / hosts for `sandbox`. |
+| **`dnsAllowlist`** | DNS allowlist for `sandbox`: **`mode`** `merge` (default) adds `suffixes` / `exactHosts` to the [built-in list](lib/dns-allowlist-default.json); **`replace`** uses **only** your lists (strict; you must include every host your install needs). |
 | **`sandbox.mountSsh`** | Same as `--mount-ssh`. |
 | **`sandbox.sshDir`** | Same as `--ssh-dir` (wins over `mountSsh` when set). |
 
@@ -216,7 +217,7 @@ When you compare to a saved baseline, npm-sentinel can report:
 
 ## Development (this repo)
 
-Extra guides (testing **`check`**, sandbox/DNS, supply-chain context): **[`docs/`](docs/README.md)**. Security reports: **[`SECURITY.md`](SECURITY.md)**.
+Command details and testing: **[`docs/`](docs/README.md)** (per-command guides under **`docs/commands/`**). Security reports: **[`SECURITY.md`](SECURITY.md)**.
 
 ```bash
 git clone https://github.com/kushankurdas/npm-sentinel.git
