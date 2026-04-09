@@ -42,3 +42,32 @@ test("parseNpmLockfile v1", () => {
   assert.equal(ax.version, "1.14.0");
   assert.ok(ax.directDependencyNames.includes("follow-redirects"));
 });
+
+test("getRootDependencyResolution resolves link:true local packages in v3", () => {
+  const lock = {
+    lockfileVersion: 3,
+    packages: {
+      "": {
+        dependencies: {
+          "@shannon/mcp-server": "file:./mcp-server",
+        },
+      },
+      "mcp-server": {
+        name: "@shannon/mcp-server",
+        version: "1.0.0",
+        dependencies: {
+          zod: "^4.3.6",
+        },
+      },
+      "node_modules/@shannon/mcp-server": {
+        resolved: "mcp-server",
+        link: true,
+      },
+    },
+  };
+  const p = parseNpmLockfile(lock);
+  const res = getRootDependencyResolution(p, "@shannon/mcp-server");
+  assert.ok(res);
+  assert.equal(res.version, "1.0.0");
+  assert.deepEqual(res.directDependencyNames, ["zod"]);
+});
