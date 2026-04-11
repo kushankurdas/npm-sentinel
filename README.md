@@ -1,10 +1,35 @@
 # npm-sentinel
 
-**npm-sentinel** helps you catch risky dependency changes before or during install:
+**npm-sentinel** is built for the gap **after** “nothing matched CVE/NVD/OSV today.” Most scanners answer: *is this version on a list?* This tool asks: *did the dependency graph or install behavior change in a way that should make me stop and think?*
 
-- **Fast checks** — scan your `package-lock.json` against vulnerability databases and known-bad versions.
-- **Baseline drift** — detect new dependencies or install scripts on packages you trust (similar to how the [Axios supply-chain incident](https://www.elastic.co/security-labs/axios-one-rat-to-rule-them-all) introduced a hidden dependency).
-- **Optional Docker sandbox** — run `npm ci` **inside a container** with DNS monitoring, so malicious `postinstall` scripts do not run on your host during that check.
+Think of it a little like **macOS asking for consent** when something new wants access: you still install packages with npm, but **npm-sentinel** surfaces **differentials**—what showed up that was not there before, or what the install tried to talk to—so you can react before “unknown” becomes “incident write-up.”
+
+**What you get:**
+
+- **Baseline drift** — for packages you already trust (your direct deps), flag **new transitive dependencies**, **new lifecycle scripts**, and **version jumps**—the same class of signal as when a widely used client suddenly pulls in an unrelated helper package you did not expect.
+- **Optional Docker sandbox** — run **`npm ci` with scripts** inside a container and **watch DNS** against an allowlist, so you can see **unexpected outbound hosts** during install without running that install on your host.
+- **Lockfile intelligence** — optional **OSV** and offline IOC-style checks for **known** bad versions (useful, but explicitly **not** the whole story).
+
+---
+
+## Why this is different from “CVE-only” tooling
+
+| Typical dependency scanners | npm-sentinel’s angle |
+|------------------------------|----------------------|
+| Depend on curated feeds (CVE, NVD, OSV, vendor advisories) | **Drift vs your own baseline** — “this trusted package’s tree **changed**” |
+| Tell you after a CVE exists | Helps surface **sketchy structure and behavior** even when the vuln is **still unnamed** |
+| Rarely model “why does *this* package need *that* now?” | Highlights **new edges** in the graph and **new install-time behavior** |
+
+OSV and similar feeds are **one layer** here. The baseline and sandbox layers are for when the threat is **not yet** in any database—or never will be, because the issue is “wrong package, wrong script, wrong phone home,” not a scored CVE.
+
+---
+
+## Example outcomes (the mental model)
+
+- **Static / baseline:** “`axios`’s resolved tree now includes **`plain-crypto-js`** (or another dependency you do not recognize). Nothing is ‘CVE-critical’ yet—but **why is it there suddenly?**”
+- **Sandbox:** “During `npm ci`, something resolved from your lockfile tried to reach **`example-malicious-host[.]com`** (or any host **not** on your allowlist).” You configure what “normal” looks like; anything else is surfaced for review.
+
+Those are **differential** signals: compare to **what you accepted before** and **what the install actually did** in isolation.
 
 ---
 
@@ -14,7 +39,7 @@ Think of it as **two layers**:
 
 | Layer | What it does | Needs Docker? |
 |--------|----------------|---------------|
-| **A — Static** | Reads the lockfile, calls [OSV](https://osv.dev/), optional baseline compare | **No** |
+| **A — Static** | Reads the lockfile; optional OSV/IOCs; optional **baseline compare** (“what drifted?”) | **No** |
 | **B — Sandbox** | Runs a real `npm ci` in Linux + watches DNS | **Yes** |
 
 ### Cheat sheet (what to run)
@@ -28,11 +53,11 @@ Think of it as **two layers**:
 | **Heavy: install in Docker + DNS allowlist** | `npx npm-sentinel sandbox` |
 | **CI: static check, then optionally sandbox** | `npx npm-sentinel gate` or `npx npm-sentinel gate --require-sandbox` |
 
-**Most teams:** use **`check`** (and **`check --baseline`** once baselines exist) on every PR; add **`sandbox`** where you need install-time behavior proof.
+**Most teams:** use **`check`** (and **`check --baseline`** once baselines exist) on every PR; add **`sandbox`** where you need **install-time** behavior proof (DNS, scripts) without trusting the host.
 
 ### Commands in plain English
 
-- **`check`** — “Does this lockfile list any known vulnerable or known-malicious versions?” Optionally: “Did my trusted direct deps drift vs my baseline?”
+- **`check`** — “Does this lockfile match **known** bad versions (OSV/IOCs)?” Optionally: “Did my **trusted** direct deps **drift** vs my baseline?”
 - **`baseline save`** — “Remember today’s dependency + script picture for my root `package.json` deps as **trusted**.” Writes `.npm-sentinel-baseline.json`.
 - **`baseline diff`** — “What changed since `baseline save`?” (new child deps, new install scripts, version bumps, etc.)
 - **`sandbox`** — “Copy the project into a container, run **`npm ci` with scripts on**, record DNS. Fail if DNS hits unknown domains or `npm ci` fails.” Use **`--mount-ssh`** if you have private **`git+ssh`** dependencies (see below).
@@ -164,7 +189,7 @@ npm link npm-sentinel
 The image includes **`git`** and **`openssh-client`**.
 
 | Approach | Command / config |
-|----------|-------------------|
+|----------|------------------|
 | Mount host keys | `npm-sentinel sandbox --mount-ssh` |
 | Mount a key folder only | `npm-sentinel sandbox --ssh-dir /path/to/keys` |
 | Config file | `npm-sentinel.config.json`: `"sandbox": { "mountSsh": true }` or `"sshDir": "/path"` |
@@ -212,6 +237,8 @@ When you compare to a saved baseline, npm-sentinel can report:
 - **New lifecycle scripts** on a resolved version (`preinstall` / `install` / `postinstall`)
 - **Version changes** on watched packages
 - **Removed dependencies** (warning; can be noisy; possible account-takeover signal)
+
+Real-world context: the [Axios supply-chain write-up](https://www.elastic.co/security-labs/axios-one-rat-to-rule-them-all) is exactly the kind of change a **baseline diff** is meant to make obvious early.
 
 ---
 
